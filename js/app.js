@@ -27,12 +27,26 @@ function indexAtRandom(max) {
 
 function imageGenerator() {
   var firstPicture = indexAtRandom(pictureArray.length);
-
   picOne.src = pictureArray[firstPicture].src;
+  picOne.title = pictureArray[firstPicture].title;
+  picOne.alt = pictureArray[firstPicture].alt;
+
   var secondPicture = indexAtRandom(pictureArray.length);
+  while(secondPicture === firstPicture) {
+    secondPicture = indexAtRandom(pictureArray.length);
+  }
   picTwo.src = pictureArray[secondPicture].src;
+  picTwo.title = pictureArray[secondPicture].title;
+  picTwo.alt = pictureArray[secondPicture].alt;
+
   var thirdPicture = indexAtRandom(pictureArray.length);
+  while (thirdPicture === secondPicture || thirdPicture === firstPicture) {
+    thirdPicture = indexAtRandom(pictureArray.length);
+  }
   picThree.src = pictureArray[thirdPicture].src;
+  picThree.title = pictureArray[thirdPicture].title;
+  picThree.alt = pictureArray[thirdPicture].alt;
+
 
 }
 
