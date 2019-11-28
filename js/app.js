@@ -3,6 +3,7 @@
 var picOne = document.getElementById('picture1');
 var picTwo = document.getElementById('picture2');
 var picThree = document.getElementById('picture3');
+var imageContainer = document.getElementById('random-container');
 
 var pictureArray = [];
 var roundArray = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25'];
@@ -17,6 +18,9 @@ function PictureObject(src, name) {
   this.src = `../images/${src}.jpg`;
   this.title = name;
   this.alt = name;
+  //create array to keep track of clicks and times seen
+  this.clicked = 0;
+  this.timesViewed = 0;
 
   pictureArray.push(this);
 }
@@ -31,6 +35,8 @@ function imageGenerator() {
   picOne.title = pictureArray[firstPicture].title;
   picOne.alt = pictureArray[firstPicture].alt;
 
+  pictureArray[firstPicture].timesViewed ++;
+
   var secondPicture = indexAtRandom(pictureArray.length);
   while(secondPicture === firstPicture) {
     secondPicture = indexAtRandom(pictureArray.length);
@@ -38,6 +44,8 @@ function imageGenerator() {
   picTwo.src = pictureArray[secondPicture].src;
   picTwo.title = pictureArray[secondPicture].title;
   picTwo.alt = pictureArray[secondPicture].alt;
+
+  pictureArray[secondPicture].timesViewed ++;
 
   var thirdPicture = indexAtRandom(pictureArray.length);
   while (thirdPicture === secondPicture || thirdPicture === firstPicture) {
@@ -47,7 +55,16 @@ function imageGenerator() {
   picThree.title = pictureArray[thirdPicture].title;
   picThree.alt = pictureArray[thirdPicture].alt;
 
+  pictureArray[thirdPicture].timesViewed ++;
 
+  console.table(pictureArray);
+
+}
+
+//event listener will go here
+function handleClick(event) {
+  var vote = event.target.title;
+  imageGenerator();
 }
 
 function createPictureList() {
@@ -76,6 +93,7 @@ function createPictureList() {
 
 
 createPictureList();
-console.table(pictureArray);
-
+imageContainer.addEventListener('click', handleClick);
 imageGenerator();
+
+
