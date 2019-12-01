@@ -64,7 +64,13 @@ function imageGenerator() {
 //event listener will go here
 function handleClick(event) {
   var vote = event.target.title;
+  for(var i = 0; i < pictureArray.length; i++) {
+    if(vote === pictureArray[i].title) {
+      pictureArray[i].clicked++;
+    }
+  }
   imageGenerator();
+
 }
 
 function createPictureList() {
