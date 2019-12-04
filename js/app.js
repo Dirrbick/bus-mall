@@ -9,8 +9,7 @@ var roundCount = document.getElementById('countdown');
 var mainRemove = document.getElementById('removeMe');
 var pictureArray = [];
 var pictureArrayContainers = [picOne, picTwo, picThree];
-var roundNumber = 5;
-var newPicArray = [];
+var roundNumber = 25;
 
 
 ////write a constructor function that contains name and file path
@@ -41,22 +40,26 @@ function showElement(elem) {
 function hideElement(elem) {
   elem.style.display = 'none';
 }
+var previousPictures = [];
+console.log('before', previousPictures);
 
 function imageGenerator() {
   var currentPictures = [];
   for(var i = 0; i < pictureArrayContainers.length; i ++){
     var randomIndexCurrently = indexAtRandom(pictureArray.length);
-    if (currentPictures.includes(randomIndexCurrently)){
+    if (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
       randomIndexCurrently = indexAtRandom(pictureArray.length);
     }
     currentPictures.push(randomIndexCurrently);
+    previousPictures = currentPictures;
     pictureArrayContainers[i].src = pictureArray[randomIndexCurrently].src;
     pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
     pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
     pictureArray[randomIndexCurrently].timesViewed++;
   }
-  console.table(pictureArray);
+  // console.table(pictureArray);
   // console.log(newPicArray);
+  console.log('after', previousPictures);
 
 }
 roundCount.textContent = `You have ${roundNumber} guesses left`;
@@ -79,6 +82,7 @@ function handleClick(event) {
     hideElement(mainRemove);
   }
 }
+
 
 function voteTally() {
   var ulEl = document.createElement('ul');
@@ -119,5 +123,4 @@ createPictureList();
 imageContainer.addEventListener('click', handleClick);
 
 imageGenerator();
-
 
