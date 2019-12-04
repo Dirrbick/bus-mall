@@ -6,7 +6,9 @@ var picThree = document.getElementById('picture3');
 var imageContainer = document.getElementById('random-container');
 
 var pictureArray = [];
-var roundArray = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25'];
+var roundNumber = 5;
+
+
 ////write a constructor function that contains name and file path
 // create array that holds number of times a product was clicked
 //global variables
@@ -63,14 +65,31 @@ function imageGenerator() {
 
 //event listener will go here
 function handleClick(event) {
-  var vote = event.target.title;
-  for(var i = 0; i < pictureArray.length; i++) {
-    if(vote === pictureArray[i].title) {
-      pictureArray[i].clicked++;
+  roundNumber--;
+  if (roundNumber !== 0){
+    var vote = event.target.title;
+    for (var i = 0; i < pictureArray.length; i++){
+      if(vote === pictureArray[i].title) {
+        pictureArray[i].clicked++;
+      }
     }
+    imageGenerator();
+  } else {
+    imageContainer.removeEventListener('click', handleClick);
+    console.log('I stopped');
+    voteTally();
   }
-  imageGenerator();
+}
 
+function voteTally() {
+  var voteCount = document.getElementById('voteList');
+  var ulEl = document.createElement('ul');
+  for (var i = 0; i < pictureArray.length; i ++) {
+    var liEl = document.createElement('li');
+    liEl.textContent = `${pictureArray[i].title}: ${pictureArray[i].clicked} clicks & ${pictureArray[i].timesViewed} views`;
+    ulEl.appendChild(liEl);
+  }
+  voteCount.appendChild(ulEl);
 }
 
 function createPictureList() {
