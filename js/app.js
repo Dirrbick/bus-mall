@@ -5,9 +5,12 @@ var picTwo = document.getElementById('picture2');
 var picThree = document.getElementById('picture3');
 var imageContainer = document.getElementById('random-container');
 var voteCount = document.getElementById('voteList');
-
+var roundCount = document.getElementById('countdown');
+var mainRemove = document.getElementById('removeMe');
 var pictureArray = [];
+var pictureArrayContainers = [picOne, picTwo, picThree];
 var roundNumber = 5;
+var newPicArray = [];
 
 
 ////write a constructor function that contains name and file path
@@ -38,41 +41,29 @@ function showElement(elem) {
 function hideElement(elem) {
   elem.style.display = 'none';
 }
+
 function imageGenerator() {
-  var firstPicture = indexAtRandom(pictureArray.length);
-  picOne.src = pictureArray[firstPicture].src;
-  picOne.title = pictureArray[firstPicture].title;
-  picOne.alt = pictureArray[firstPicture].alt;
-
-  pictureArray[firstPicture].timesViewed ++;
-
-  var secondPicture = indexAtRandom(pictureArray.length);
-  while(secondPicture === firstPicture) {
-    secondPicture = indexAtRandom(pictureArray.length);
+  var currentPictures = [];
+  for(var i = 0; i < pictureArrayContainers.length; i ++){
+    var randomIndexCurrently = indexAtRandom(pictureArray.length);
+    if (currentPictures.includes(randomIndexCurrently)){
+      randomIndexCurrently = indexAtRandom(pictureArray.length);
+    }
+    currentPictures.push(randomIndexCurrently);
+    pictureArrayContainers[i].src = pictureArray[randomIndexCurrently].src;
+    pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
+    pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
+    pictureArray[randomIndexCurrently].timesViewed++;
   }
-  picTwo.src = pictureArray[secondPicture].src;
-  picTwo.title = pictureArray[secondPicture].title;
-  picTwo.alt = pictureArray[secondPicture].alt;
-
-  pictureArray[secondPicture].timesViewed ++;
-
-  var thirdPicture = indexAtRandom(pictureArray.length);
-  while (thirdPicture === secondPicture || thirdPicture === firstPicture) {
-    thirdPicture = indexAtRandom(pictureArray.length);
-  }
-  picThree.src = pictureArray[thirdPicture].src;
-  picThree.title = pictureArray[thirdPicture].title;
-  picThree.alt = pictureArray[thirdPicture].alt;
-
-  pictureArray[thirdPicture].timesViewed ++;
-
   console.table(pictureArray);
+  // console.log(newPicArray);
 
 }
-
+roundCount.textContent = `You have ${roundNumber} guesses left`;
 //event listener will go here
 function handleClick(event) {
   roundNumber--;
+  roundCount.textContent = `You have ${roundNumber} guesses left`;
   if (roundNumber !== 0){
     var vote = event.target.title;
     for (var i = 0; i < pictureArray.length; i++){
@@ -85,7 +76,7 @@ function handleClick(event) {
     imageContainer.removeEventListener('click', handleClick);
     console.log('I stopped');
     voteTally();
-    hideElement(imageContainer);
+    hideElement(mainRemove);
   }
 }
 
@@ -126,6 +117,7 @@ function createPictureList() {
 
 createPictureList();
 imageContainer.addEventListener('click', handleClick);
+
 imageGenerator();
 
 
