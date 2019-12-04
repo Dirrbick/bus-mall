@@ -4,6 +4,7 @@ var picOne = document.getElementById('picture1');
 var picTwo = document.getElementById('picture2');
 var picThree = document.getElementById('picture3');
 var imageContainer = document.getElementById('random-container');
+var voteCount = document.getElementById('voteList');
 
 var pictureArray = [];
 var roundNumber = 5;
@@ -31,6 +32,12 @@ function indexAtRandom(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+function showElement(elem) {
+  elem.style.display = 'block';
+}
+function hideElement(elem) {
+  elem.style.display = 'none';
+}
 function imageGenerator() {
   var firstPicture = indexAtRandom(pictureArray.length);
   picOne.src = pictureArray[firstPicture].src;
@@ -78,11 +85,11 @@ function handleClick(event) {
     imageContainer.removeEventListener('click', handleClick);
     console.log('I stopped');
     voteTally();
+    hideElement(imageContainer);
   }
 }
 
 function voteTally() {
-  var voteCount = document.getElementById('voteList');
   var ulEl = document.createElement('ul');
   for (var i = 0; i < pictureArray.length; i ++) {
     var liEl = document.createElement('li');
