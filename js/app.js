@@ -4,9 +4,14 @@ var picOne = document.getElementById('picture1');
 var picTwo = document.getElementById('picture2');
 var picThree = document.getElementById('picture3');
 var imageContainer = document.getElementById('random-container');
-
+var voteCount = document.getElementById('voteList');
+var roundCount = document.getElementById('countdown');
+var mainRemove = document.getElementById('removeMe');
 var pictureArray = [];
-var roundArray = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25'];
+var pictureArrayContainers = [picOne, picTwo, picThree];
+var roundNumber = 25;
+
+
 ////write a constructor function that contains name and file path
 // create array that holds number of times a product was clicked
 //global variables
@@ -29,42 +34,64 @@ function indexAtRandom(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
+function showElement(elem) {
+  elem.style.display = 'block';
+}
+function hideElement(elem) {
+  elem.style.display = 'none';
+}
+var previousPictures = [];
+console.log('before', previousPictures);
+
 function imageGenerator() {
-  var firstPicture = indexAtRandom(pictureArray.length);
-  picOne.src = pictureArray[firstPicture].src;
-  picOne.title = pictureArray[firstPicture].title;
-  picOne.alt = pictureArray[firstPicture].alt;
-
-  pictureArray[firstPicture].timesViewed ++;
-
-  var secondPicture = indexAtRandom(pictureArray.length);
-  while(secondPicture === firstPicture) {
-    secondPicture = indexAtRandom(pictureArray.length);
+  var currentPictures = [];
+  for(var i = 0; i < pictureArrayContainers.length; i ++){
+    var randomIndexCurrently = indexAtRandom(pictureArray.length);
+    if (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
+      randomIndexCurrently = indexAtRandom(pictureArray.length);
+    }
+    currentPictures.push(randomIndexCurrently);
+    previousPictures = currentPictures;
+    pictureArrayContainers[i].src = pictureArray[randomIndexCurrently].src;
+    pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
+    pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
+    pictureArray[randomIndexCurrently].timesViewed++;
   }
-  picTwo.src = pictureArray[secondPicture].src;
-  picTwo.title = pictureArray[secondPicture].title;
-  picTwo.alt = pictureArray[secondPicture].alt;
-
-  pictureArray[secondPicture].timesViewed ++;
-
-  var thirdPicture = indexAtRandom(pictureArray.length);
-  while (thirdPicture === secondPicture || thirdPicture === firstPicture) {
-    thirdPicture = indexAtRandom(pictureArray.length);
-  }
-  picThree.src = pictureArray[thirdPicture].src;
-  picThree.title = pictureArray[thirdPicture].title;
-  picThree.alt = pictureArray[thirdPicture].alt;
-
-  pictureArray[thirdPicture].timesViewed ++;
-
-  console.table(pictureArray);
+  // console.table(pictureArray);
+  // console.log(newPicArray);
+  console.log('after', previousPictures);
 
 }
-
+roundCount.textContent = `You have ${roundNumber} guesses left`;
 //event listener will go here
 function handleClick(event) {
-  var vote = event.target.title;
-  imageGenerator();
+  roundNumber--;
+  roundCount.textContent = `You have ${roundNumber} guesses left`;
+  if (roundNumber !== 0){
+    var vote = event.target.title;
+    for (var i = 0; i < pictureArray.length; i++){
+      if(vote === pictureArray[i].title) {
+        pictureArray[i].clicked++;
+      }
+    }
+    imageGenerator();
+  } else {
+    imageContainer.removeEventListener('click', handleClick);
+    console.log('I stopped');
+    voteTally();
+    hideElement(mainRemove);
+  }
+}
+
+
+function voteTally() {
+  var ulEl = document.createElement('ul');
+  for (var i = 0; i < pictureArray.length; i ++) {
+    var liEl = document.createElement('li');
+    liEl.textContent = `${pictureArray[i].title}: ${pictureArray[i].clicked} clicks & ${pictureArray[i].timesViewed} views`;
+    ulEl.appendChild(liEl);
+  }
+  voteCount.appendChild(ulEl);
 }
 
 function createPictureList() {
@@ -94,6 +121,6 @@ function createPictureList() {
 
 createPictureList();
 imageContainer.addEventListener('click', handleClick);
-imageGenerator();
 
+imageGenerator();
 
