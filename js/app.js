@@ -1,4 +1,4 @@
-'use script';
+'use strict';
 //calls pic info from html
 var picOne = document.getElementById('picture1');
 var picTwo = document.getElementById('picture2');
@@ -46,7 +46,7 @@ function imageGenerator() {
   var currentPictures = [];
   for(var i = 0; i < pictureArrayContainers.length; i ++){
     var randomIndexCurrently = indexAtRandom(pictureArray.length);
-    while (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
+    while (currentPictures.includes(randomIndexCurrently) || previousPictures.includes(randomIndexCurrently)){
       randomIndexCurrently = indexAtRandom(pictureArray.length);
     }
     currentPictures.push(randomIndexCurrently);
@@ -54,11 +54,10 @@ function imageGenerator() {
     pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
     pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
     pictureArray[randomIndexCurrently].timesViewed++;
-    previousPictures = currentPictures;
   }
+  previousPictures = currentPictures;
   // console.table(pictureArray);
   // console.log(newPicArray);
-  console.log('after', previousPictures);
 
 }
 roundCount.textContent = `You have ${roundNumber} guesses left`;
@@ -79,7 +78,50 @@ function handleClick(event) {
     console.log('I stopped');
     voteTally();
     hideElement(mainRemove);
+    showElement(populateChart());
   }
+}
+//Create chart
+var titleLabel = [];
+var viewLabel = [];
+var clicksLabel = [];
+
+
+function tableData () {
+  titleLabel = [];
+  viewLabel = [];
+  clicksLabel = [];
+  for (var i = 0 ; i < pictureArray.length; i++) {
+    titleLabel.push(pictureArray[i].title);
+    viewLabel.push(pictureArray[i].timesViewed);
+    clicksLabel.push(pictureArray[i].clicked);
+  }
+}
+function populateChart (){
+  tableData();
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+    // The type of chart we want to create
+    type: 'bar',
+    // The data for our dataset
+    data: {
+      labels: titleLabel,
+      datasets: [{
+        label: 'Times Clicked',
+        backgroundColor: 'rgb(238,130,238)',
+        borderColor: 'rgb(0, 0, 0)',
+        data: clicksLabel,
+      },
+      {
+        label: 'Times Viewed',
+        backgroundColor: 'rgb(212, 175, 55)',
+        borderColor: 'rgb(0,0,0)',
+        data: viewLabel,
+      }],
+    },
+    // Configuration options go here
+    options: {},
+  });
 }
 
 
@@ -122,5 +164,4 @@ createPictureList();
 imageContainer.addEventListener('click', handleClick);
 
 imageGenerator();
-
 
