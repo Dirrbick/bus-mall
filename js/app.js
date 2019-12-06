@@ -41,21 +41,20 @@ function hideElement(elem) {
   elem.style.display = 'none';
 }
 var previousPictures = [];
-console.log('before', previousPictures);
 
 function imageGenerator() {
   var currentPictures = [];
   for(var i = 0; i < pictureArrayContainers.length; i ++){
     var randomIndexCurrently = indexAtRandom(pictureArray.length);
-    if (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
+    while (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
       randomIndexCurrently = indexAtRandom(pictureArray.length);
     }
     currentPictures.push(randomIndexCurrently);
-    previousPictures = currentPictures;
     pictureArrayContainers[i].src = pictureArray[randomIndexCurrently].src;
     pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
     pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
     pictureArray[randomIndexCurrently].timesViewed++;
+    previousPictures = currentPictures;
   }
   // console.table(pictureArray);
   // console.log(newPicArray);
@@ -123,24 +122,4 @@ createPictureList();
 imageContainer.addEventListener('click', handleClick);
 
 imageGenerator();
-
-var ctx = document.getElementById('myChart').getContext('2d');
-var chart = new Chart(ctx, {
-  // The type of chart we want to create
-  type: 'bar',
-
-  // The data for our dataset
-  data: {
-    labels: pictureArray.title,
-    datasets: [{
-      label: 'BusMall Data',
-      backgroundColor: 'rgb(255, 99, 132)',
-      borderColor: 'rgb(255, 99, 132)',
-      data: 
-    }],
-  },
-
-  // Configuration options go here
-  options: {},
-});
 
