@@ -41,21 +41,20 @@ function hideElement(elem) {
   elem.style.display = 'none';
 }
 var previousPictures = [];
-console.log('before', previousPictures);
 
 function imageGenerator() {
   var currentPictures = [];
   for(var i = 0; i < pictureArrayContainers.length; i ++){
     var randomIndexCurrently = indexAtRandom(pictureArray.length);
-    if (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
+    while (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
       randomIndexCurrently = indexAtRandom(pictureArray.length);
     }
     currentPictures.push(randomIndexCurrently);
-    previousPictures = currentPictures;
     pictureArrayContainers[i].src = pictureArray[randomIndexCurrently].src;
     pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
     pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
     pictureArray[randomIndexCurrently].timesViewed++;
+    previousPictures = currentPictures;
   }
   // console.table(pictureArray);
   // console.log(newPicArray);
@@ -123,4 +122,5 @@ createPictureList();
 imageContainer.addEventListener('click', handleClick);
 
 imageGenerator();
+
 
