@@ -41,13 +41,12 @@ function hideElement(elem) {
   elem.style.display = 'none';
 }
 var previousPictures = [];
-var currentPictures = [];
 
 function imageGenerator() {
-  currentPictures = [];
+  var currentPictures = [];
   for(var i = 0; i < pictureArrayContainers.length; i ++){
     var randomIndexCurrently = indexAtRandom(pictureArray.length);
-    while (currentPictures.includes(randomIndexCurrently) || currentPictures.includes(previousPictures) || previousPictures.includes(randomIndexCurrently)){
+    while (currentPictures.includes(randomIndexCurrently) || previousPictures.includes(randomIndexCurrently)){
       randomIndexCurrently = indexAtRandom(pictureArray.length);
     }
     currentPictures.push(randomIndexCurrently);
@@ -55,11 +54,10 @@ function imageGenerator() {
     pictureArrayContainers[i].title = pictureArray[randomIndexCurrently].title;
     pictureArrayContainers[i].alt = pictureArray[randomIndexCurrently].alt;
     pictureArray[randomIndexCurrently].timesViewed++;
-    previousPictures = currentPictures;
   }
+  previousPictures = currentPictures;
   // console.table(pictureArray);
   // console.log(newPicArray);
-  console.log('after', previousPictures);
 
 }
 roundCount.textContent = `You have ${roundNumber} guesses left`;
