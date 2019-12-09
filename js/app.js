@@ -8,7 +8,7 @@ var roundCount = document.getElementById('countdown');
 var mainRemove = document.getElementById('removeMe');
 var pictureArray = [];
 var pictureArrayContainers = [picOne, picTwo, picThree];
-var roundNumber = 2;
+var roundNumber = 25;
 
 ////write a constructor function that contains name and file path
 // create array that holds number of times a product was clicked
