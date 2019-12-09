@@ -4,13 +4,11 @@ var picOne = document.getElementById('picture1');
 var picTwo = document.getElementById('picture2');
 var picThree = document.getElementById('picture3');
 var imageContainer = document.getElementById('random-container');
-var voteCount = document.getElementById('voteList');
 var roundCount = document.getElementById('countdown');
 var mainRemove = document.getElementById('removeMe');
 var pictureArray = [];
 var pictureArrayContainers = [picOne, picTwo, picThree];
-var roundNumber = 25;
-
+var roundNumber = 2;
 
 ////write a constructor function that contains name and file path
 // create array that holds number of times a product was clicked
@@ -29,6 +27,7 @@ function PictureObject(src, name) {
 
   pictureArray.push(this);
 }
+
 
 function indexAtRandom(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -56,8 +55,6 @@ function imageGenerator() {
     pictureArray[randomIndexCurrently].timesViewed++;
   }
   previousPictures = currentPictures;
-  // console.table(pictureArray);
-  // console.log(newPicArray);
 
 }
 roundCount.textContent = `You have ${roundNumber} guesses left`;
@@ -70,15 +67,15 @@ function handleClick(event) {
     for (var i = 0; i < pictureArray.length; i++){
       if(vote === pictureArray[i].title) {
         pictureArray[i].clicked++;
+        var storageString = JSON.stringify(pictureArray);
+        localStorage.setItem('voting', storageString);
       }
     }
     imageGenerator();
   } else {
     imageContainer.removeEventListener('click', handleClick);
-    console.log('I stopped');
-    voteTally();
     hideElement(mainRemove);
-    showElement(populateChart());
+    populateChart();
   }
 }
 //Create chart
@@ -125,15 +122,7 @@ function populateChart (){
 }
 
 
-function voteTally() {
-  var ulEl = document.createElement('ul');
-  for (var i = 0; i < pictureArray.length; i ++) {
-    var liEl = document.createElement('li');
-    liEl.textContent = `${pictureArray[i].title}: ${pictureArray[i].clicked} clicks & ${pictureArray[i].timesViewed} views`;
-    ulEl.appendChild(liEl);
-  }
-  voteCount.appendChild(ulEl);
-}
+
 
 function createPictureList() {
   new PictureObject('bag', 'R2D2 Bag');
@@ -160,8 +149,20 @@ function createPictureList() {
 
 
 
-createPictureList();
 imageContainer.addEventListener('click', handleClick);
 
-imageGenerator();
+//local storage info gets stored
 
+
+function onPageLoad(){
+  if (localStorage.voting){
+    var getCharacter = localStorage.getItem('voting');
+    pictureArray = JSON.parse(getCharacter);
+    imageGenerator();
+  } else {
+    createPictureList();
+    imageGenerator();
+  }
+}
+
+onPageLoad();
