@@ -8,7 +8,7 @@ var roundCount = document.getElementById('countdown');
 var mainRemove = document.getElementById('removeMe');
 var pictureArray = [];
 var pictureArrayContainers = [picOne, picTwo, picThree];
-var roundNumber = 25;
+var roundNumber = 2;
 
 ////write a constructor function that contains name and file path
 // create array that holds number of times a product was clicked
@@ -55,8 +55,6 @@ function imageGenerator() {
     pictureArray[randomIndexCurrently].timesViewed++;
   }
   previousPictures = currentPictures;
-  // console.table(pictureArray);
-  // console.log(newPicArray);
 
 }
 roundCount.textContent = `You have ${roundNumber} guesses left`;
@@ -71,13 +69,11 @@ function handleClick(event) {
         pictureArray[i].clicked++;
         var storageString = JSON.stringify(pictureArray);
         localStorage.setItem('voting', storageString);
-        console.log(pictureArray[i].title, pictureArray[i].clicked);
       }
     }
     imageGenerator();
   } else {
     imageContainer.removeEventListener('click', handleClick);
-    // console.log('I stopped');
     hideElement(mainRemove);
     populateChart();
   }
