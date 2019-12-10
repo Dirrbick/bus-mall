@@ -18,7 +18,7 @@ var roundNumber = 25;
 //add event.listener "click" function
 
 function PictureObject(src, name) {
-  this.src = `../images/${src}.jpg`;
+  this.src = `images/${src}.jpg`;
   this.title = name;
   this.alt = name;
   //create array to keep track of clicks and times seen
